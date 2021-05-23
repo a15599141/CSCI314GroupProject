@@ -1,1 +1,1 @@
-# Game development by project team Randomness
+# Source code of CSCI314 project
