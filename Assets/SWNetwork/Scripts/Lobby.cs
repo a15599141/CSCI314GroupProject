@@ -86,6 +86,7 @@ public class Lobby : MonoBehaviour // lobby class to control lobby events
         AutoSendMessageButton.interactable = false; // set auto send message button into disable in beginning
         AutoRegistrationButton.onClick.AddListener(() => // add trigger events when auto registration button click
         {
+            EntryRegisterButton.interactable = false; // disable Register Button when Registration processing
             AutoExecutionResultText.text = ""; // clear test report
             length = UnityEngine.Random.Range(0, MaxCharOfPlayerName*2); // random length of string
             useNum = UnityEngine.Random.value > 0.3f; // chance of having number in random generated string
@@ -98,6 +99,7 @@ public class Lobby : MonoBehaviour // lobby class to control lobby events
         });
         AutoCreateRoomButton.onClick.AddListener(() => // add trigger events when auto create room button click
         {
+            AutoCreateRoomButton.interactable = false;
             AutoExecutionResultText.text = ""; 
             length = UnityEngine.Random.Range(0, MaxCharOfRoomName*2); 
             useNum = UnityEngine.Random.value > 0.3f;
@@ -111,6 +113,7 @@ public class Lobby : MonoBehaviour // lobby class to control lobby events
         });
         AutoSendMessageButton.onClick.AddListener(() => // add trigger events when auto send message button click
         {
+            AutoSendMessageButton.interactable = false;
             AutoExecutionResultText.text = "";
             length = UnityEngine.Random.Range(0, MaxCharOfMessage * 2);
             useNum = UnityEngine.Random.value > 0.3f;
@@ -120,6 +123,7 @@ public class Lobby : MonoBehaviour // lobby class to control lobby events
             GUI.HandleSendRoomMessageErrorOk(); // auto click on OK button if message send error already pop up
             GUI.messageRoomText.text = GetRandomString(length, useNum, useLow, useUpp, useSpe, custom);
             SendRoomMessage(); // auto click on send message button
+
         });
     }
     public string GetRandomString(int length, bool useNum, bool useLow, bool useUpp, bool useSpe, string custom)// method of generating random string
@@ -146,7 +150,7 @@ public class Lobby : MonoBehaviour // lobby class to control lobby events
         EntryRegisterText.text = "Registering...";
         ExecutionFailed.SetActive(false);
         ExecutionPassed.SetActive(false);
-        EntryRegisterButton.interactable = false;
+
 
         if (playerName_.Length == 0) 
         {
@@ -299,6 +303,7 @@ public class Lobby : MonoBehaviour // lobby class to control lobby events
                         GUI.ShowCreateRoomErrorPopup();
                         Debug.Log("Failed to create room " + error);
                     }
+                    AutoCreateRoomButton.interactable = true;
                     GUI.CreatingRoomMessagePopup.SetActive(false);
                 });
             }
@@ -315,6 +320,7 @@ public class Lobby : MonoBehaviour // lobby class to control lobby events
             else AutoExecutionResultText.text += "Message can't more than "+MaxCharOfMessage+" charactor\r\n";
             ExecutionFailed.SetActive(true);
             GUI.messageRoomText.Select();
+            AutoSendMessageButton.interactable = true;
         }
         else
         {
@@ -335,6 +341,7 @@ public class Lobby : MonoBehaviour // lobby class to control lobby events
                     GUI.ShowSendRoomMessageErrorPopup();
                     Debug.Log("Failed to send room message " + error);
                 }
+                AutoSendMessageButton.interactable = true;
             });
         }
 

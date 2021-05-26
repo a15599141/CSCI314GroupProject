@@ -39,7 +39,7 @@ public class LobbyGUI : MonoBehaviour // lobbyGUI class to control the interacti
 
     // The current message row count.
     int currentMessageRowCount = 0;
-    int MAX_MESSAGE_ROW_COUNT = 5;
+    int MAX_MESSAGE_ROW_COUNT = 6;
 
     //Callbak to invoke when NewGamePopup is closed.
     Action<bool, string> newGamePopupCloseCallback;
@@ -185,11 +185,13 @@ public class LobbyGUI : MonoBehaviour // lobbyGUI class to control the interacti
         {
             lobby.AutoExecutionResultText.text += "Room name can't be empty\r\n";
             lobby.ExecutionFailed.SetActive(true);
+            lobby.AutoCreateRoomButton.interactable = true;
         }
         if (roomName.Length > lobby.MaxCharOfRoomName)
         {
             lobby.AutoExecutionResultText.text += "Room name must not longer than " + lobby.MaxCharOfRoomName + " character\r\n";
             lobby.ExecutionFailed.SetActive(true);
+            lobby.AutoCreateRoomButton.interactable = true;
         }
         string spe = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~ ";
         int speCount = 0;
@@ -202,6 +204,7 @@ public class LobbyGUI : MonoBehaviour // lobbyGUI class to control the interacti
                 speCount++;
             }
         }
+        if (speCount>0) lobby.AutoCreateRoomButton.interactable = true;
         if (roomName.Length > 0 && roomName.Length <= lobby.MaxCharOfRoomName && speCount==0)
         {
             CreatingRoomMessagePopup.SetActive(true);
