@@ -1,7 +1,7 @@
 ﻿using UnityEngine.UI;
 using UnityEngine;
 
-public class TableRow : MonoBehaviour
+public class TableRow : MonoBehaviour // class to control row selected events (room select, player select)
 {
     public delegate void SelectedHandler(string objectId);
 

@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 [Serializable]
-public class RoomCustomData
+public class RoomCustomData // room data class that contains team info
 {
     public string name;
     public TeamCustomData team1;
@@ -14,7 +14,7 @@ public class RoomCustomData
 }
 
 [Serializable]
-public class TeamCustomData
+public class TeamCustomData // team info that contains player info
 {
     public List<string> players = new List<string>();
 }

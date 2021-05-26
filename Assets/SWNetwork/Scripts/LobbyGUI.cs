@@ -6,11 +6,12 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using SWNetwork;
 
-public class LobbyGUI : MonoBehaviour
+public class LobbyGUI : MonoBehaviour // lobbyGUI class to control the interactions between UI (show or hide Popup panel)
 {
-    public Lobby lobby;
+    public Lobby lobby; // lobby instance to control lobby events
 
-    public GameObject roomRowPrefab;
+    /*----UI of lobby----*/
+    public GameObject roomRowPrefab; // 
     public GameObject roomList;
 
     public GameObject playerRowPrefab;
@@ -20,62 +21,51 @@ public class LobbyGUI : MonoBehaviour
     public GameObject messageRowPrefab;
     public GameObject messageList;
 
-    public InputField newRoomText;
-    public GameObject newRoomPopup;
-    public GameObject CreatingRoomMessagePopup;
+    public Text LobbyPing; // display ping in game lobby
+    public Text playerNameText; // player name display in lobby
+    public InputField playerIdText; //input field for enter player id to send private message
+    public InputField messagePlayerText; //input field for enter message to send privately
+    public InputField messageRoomText; // input field for enter room message
+    public InputField newRoomText; // input field for enter new room name
 
-    public InputField playerIdText;
-    public InputField messagePlayerText;
-    public InputField messageRoomText;
-    public Button sendRoomMessageButton;
+    public GameObject newRoomPopup; //create new room panel
+    public GameObject CreatingRoomMessagePopup; //creating new room panel
+    public GameObject messagePlayerPopup; //send message to selected player panel
+    public GameObject sendRoomMessageErrorPopup;//error notice panel when fail in sending room message
+    public GameObject CreateRoomErrorPopup;//error notice panel when fail in creating room 
+    public GameObject LeaveRoomErrorPopup;//error notice panel when fail in leaving room 
+    public GameObject JoinRoomErrorPopup;//error notice panel when fail in joining room message
+    public GameObject BackToEntryPopup; //notice panel when player try to leave the lobby and back to lobby entry
 
-    public GameObject messagePlayerPopup;
-    public GameObject sendRoomMessageErrorPopup;
-    public GameObject CreateRoomErrorPopup;
-    public GameObject LeaveRoomErrorPopup;
-    public GameObject JoinRoomErrorPopup;
-    public GameObject BackToEntryPopup;
-
-    /// <summary>
-    /// The current message row count.
-    /// </summary>
+    // The current message row count.
     int currentMessageRowCount = 0;
     int MAX_MESSAGE_ROW_COUNT = 5;
 
-    /// <summary>
-    /// Callbak to invoke when NewGamePopup is closed.
-    /// </summary>
+    //Callbak to invoke when NewGamePopup is closed.
     Action<bool, string> newGamePopupCloseCallback;
 
-    /// <summary>
-    /// Callback to invoke when MessagePlayerPopup is closed.
-    /// </summary>
+    // Callback to invoke when MessagePlayerPopup is closed.
     Action<bool, string, string> messagePlayerPopupCloseCallback;
 
-    /// <summary>
-    /// Add a row to the Player list.
-    /// </summary>
+    // Add a row to the Player list.
     public void AddRowForPlayer(string title, string objectId, TableRow.SelectedHandler callback)
     {
         AddRowToTable(playerList.transform, playerRowPrefab, title, objectId, callback);
     }
-    /// <summary>
-    /// Add a row to the Team list.
-    /// </summary>
-    public void AddRowForTeam(string title)
+
+    // Add a row to the Team list.
+    public void AddRowForTeam(string title) 
     {
         AddRowToTable(playerList.transform, teamHeaderRowPrefab, title, null, null);
     }
-    /// <summary>
-    /// Add a row to the Room list.
-    /// </summary>
+
+    // Add a row to the Room list.
     public void AddRowForRoom(string title, string objectId, TableRow.SelectedHandler callback)
     {
         AddRowToTable(roomList.transform, roomRowPrefab, title, objectId, callback);
     }
-    /// <summary>
-    /// Add a row to the Message list.
-    /// </summary>
+
+    // Add a row to the Message list
     public void AddRowForMessage(string title, string objectId, TableRow.SelectedHandler callback)
     {
         if (currentMessageRowCount == MAX_MESSAGE_ROW_COUNT)
@@ -113,6 +103,23 @@ public class LobbyGUI : MonoBehaviour
         Destroy(messageList.gameObject);
         currentMessageRowCount = 0;
     }
+    void RemoveAllChildren(Transform parent)
+    {
+        foreach (Transform childTransform in parent)
+        {
+            Destroy(childTransform.gameObject);
+        }
+    }
+    void RemoveChild(Transform parent)
+    {
+        foreach (Transform childTransform in parent)
+        {
+            Destroy(childTransform.gameObject);
+            return;
+        }
+    }
+
+    /*----Methods to control popup panels----*/
     public void ShowBackToEntryPopup()
     {
         BackToEntryPopup.SetActive(true);
@@ -147,23 +154,7 @@ public class LobbyGUI : MonoBehaviour
         sendRoomMessageErrorPopup.SetActive(true);
     }
 
-    // Helper methods
-    void RemoveAllChildren(Transform parent)
-    {
-        foreach (Transform childTransform in parent)
-        {
-            Destroy(childTransform.gameObject);
-        }
-    }
-    void RemoveChild(Transform parent)
-    {
-        foreach (Transform childTransform in parent)
-        {
-            Destroy(childTransform.gameObject);
-            return;
-        }
-    }
-
+    /*----Methods to deal with the buttons in popup panels----*/
     public void HandleBackToEntryOk()
     {
         NetworkClient.Lobby.LeaveRoom((successful, error) =>
@@ -230,7 +221,6 @@ public class LobbyGUI : MonoBehaviour
             newGamePopupCloseCallback(false, null);
         }
     }
-
     public void HandleMessagePlayerOK()
     {
         if (playerIdText.text.Length > 0)
@@ -270,6 +260,4 @@ public class LobbyGUI : MonoBehaviour
     {
         sendRoomMessageErrorPopup.SetActive(false);
     }
-
-
 }
