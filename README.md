@@ -1,1 +1,1 @@
-# Source code of CSCI314 project
+# Unity project of CSCI314
