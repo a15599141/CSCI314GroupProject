@@ -3,22 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DragUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class DragUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler // support UI free dragging inside the screen
 {
     /// <summary>
-    /// UI和指针的位置偏移量
+    /// offset of dragging
     /// </summary>
     Vector3 offset;
 
     RectTransform rt;
     Vector3 pos;
-    float minWidth;             //水平最小拖拽范围
-    float maxWidth;            //水平最大拖拽范围
-    float minHeight;            //垂直最小拖拽范围  
-    float maxHeight;            //垂直最大拖拽范围
-    float rangeX;               //拖拽范围
-    float rangeY;               //拖拽范围
-
+    float minWidth;             //minimun dragging width
+    float maxWidth;            //maxium dragging width
+    float minHeight;            //minimun dragging height
+    float maxHeight;            //maxium dragging height
+    float rangeX;               //horizontal dragging area 
+    float rangeY;               //vertical dragging area
 
     void Update()
     {
@@ -37,34 +36,34 @@ public class DragUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     }
 
     /// <summary>
-    /// 拖拽范围限制
+    /// Drag Range Limit
     /// </summary>
     void DragRangeLimit()
     {
-        //限制水平/垂直拖拽范围在最小/最大值内
+        //limit the dragging area 
         rangeX = Mathf.Clamp(rt.position.x, minWidth, maxWidth);
         rangeY = Mathf.Clamp(rt.position.y, minHeight, maxHeight);
-        //更新位置
+        //update the position after drag
         rt.position = new Vector3(rangeX, rangeY, 0);
     }
 
     /// <summary>
-    /// 开始拖拽
+    ///  start drag
     /// </summary>
     public void OnBeginDrag(PointerEventData eventData)
     {
         Vector3 globalMousePos;
 
-        //将屏幕坐标转换成世界坐标
+        //transfer local position coordinates to world coordinates
         if (RectTransformUtility.ScreenPointToWorldPointInRectangle(rt, eventData.position, null, out globalMousePos))
         {
-            //计算UI和指针之间的位置偏移量
+            //calculate the offset between UI and pointer
             offset = rt.position - globalMousePos;
         }
     }
 
     /// <summary>
-    /// 拖拽中
+    /// when dragging
     /// </summary>
     public void OnDrag(PointerEventData eventData)
     {
@@ -72,7 +71,7 @@ public class DragUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     }
 
     /// <summary>
-    /// 结束拖拽
+    /// end of drag
     /// </summary>
     public void OnEndDrag(PointerEventData eventData)
     {
@@ -80,7 +79,7 @@ public class DragUI : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
     }
 
     /// <summary>
-    /// 更新UI的位置
+    /// update position after drag
     /// </summary>
     private void SetDraggedPosition(PointerEventData eventData)
     {
