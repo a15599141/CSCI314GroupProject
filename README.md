@@ -1,1 +1,1 @@
-# Unity project of CSCI314
+# Unity project
